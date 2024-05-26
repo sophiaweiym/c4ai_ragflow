@@ -48,7 +48,7 @@ class TaskService(CommonService):
             Tenant.img2txt_id,
             Tenant.asr_id,
             cls.model.update_time]
-        with DB.lock("get_task", -1):
+        with DB.lock("get_task", 31536000):
             docs = cls.model.select(*fields) \
                 .join(Document, on=(cls.model.doc_id == Document.id)) \
                 .join(Knowledgebase, on=(Document.kb_id == Knowledgebase.id)) \
@@ -74,7 +74,7 @@ class TaskService(CommonService):
     @classmethod
     @DB.connection_context()
     def get_ongoing_doc_name(cls):
-        with DB.lock("get_task", -1):
+        with DB.lock("get_task", 31536000):
             docs = cls.model.select(*[Document.kb_id, Document.location]) \
                 .join(Document, on=(cls.model.doc_id == Document.id)) \
                 .where(
@@ -104,7 +104,7 @@ class TaskService(CommonService):
     @classmethod
     @DB.connection_context()
     def update_progress(cls, id, info):
-        with DB.lock("update_progress", -1):
+        with DB.lock("update_progress", 31536000):
             if info["progress_msg"]:
                 cls.model.update(progress_msg=cls.model.progress_msg + "\n" + info["progress_msg"]).where(
                     cls.model.id == id).execute()
