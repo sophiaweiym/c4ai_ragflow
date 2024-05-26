@@ -1,0 +1,11 @@
+FROM infiniflow/ragflow:v0.4.0
+
+ENV PATH=/root/miniconda3/envs/py11/bin:$PATH
+
+RUN huggingface-cli download InfiniFlow/deepdoc
+RUN huggingface-cli download InfiniFlow/text_concat_xgb_v1.0
+
+## Change Source Code
+COPY api/db/services/task_service.py /ragflow/api/db/services/task_service.py
+
+RUN echo "auto_activate_base: false" > /root/.condarc
