@@ -153,7 +153,7 @@ def completion():
                                            ensure_ascii=False) + "\n\n"
             yield "data:"+json.dumps({"retcode": 0, "retmsg": "", "data": True}, ensure_ascii=False) + "\n\n"
 
-        if req.get("stream", True):
+        if req.get("stream", False):
             resp = Response(stream(), mimetype="text/event-stream")
             resp.headers.add_header("Cache-control", "no-cache")
             resp.headers.add_header("Connection", "keep-alive")

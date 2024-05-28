@@ -72,7 +72,7 @@ def message_fit_in(msg, max_length=4000):
     return max_length, msg
 
 
-def chat(dialog, messages, stream=True, **kwargs):
+def chat(dialog, messages, stream=False, **kwargs):
     assert messages[-1]["role"] == "user", "The last content of this conversation is not from user."
     llm = LLMService.query(llm_name=dialog.llm_id)
     if not llm:
