@@ -18,13 +18,15 @@ import io
 from abc import ABC
 from ollama import Client
 from PIL import Image
-from openai import OpenAI
+from openai import OpenAI, AzureOpenAI
 import os
 import base64
 from io import BytesIO
 
 from api.utils import get_uuid
 from api.utils.file_utils import get_project_base_directory
+
+from rag.settings import AZURE_OPENAI_DEPLOYMENT
 
 
 class Base(ABC):
@@ -71,6 +73,24 @@ class GptV4(Base):
         if not base_url: base_url="https://api.openai.com/v1"
         self.client = OpenAI(api_key=key, base_url=base_url)
         self.model_name = model_name
+        self.lang = lang
+
+    def describe(self, image, max_tokens=300):
+        b64 = self.image2base64(image)
+
+        res = self.client.chat.completions.create(
+            model=self.model_name,
+            messages=self.prompt(b64),
+            max_tokens=max_tokens,
+        )
+        return res.choices[0].message.content.strip(), res.usage.total_tokens
+
+
+class AzureGptV4(Base):
+    def __init__(self, key, model_name="Azure/gpt-4", lang="Chinese", base_url="https://api.openai.com/v1"):
+        if not base_url: base_url="https://api.openai.com/v1"
+        self.client = AzureOpenAI(api_key=key, base_url=base_url, api_version="2024-02-15-preview")
+        self.model_name = AZURE_OPENAI_DEPLOYMENT.get(model_name)
         self.lang = lang
 
     def describe(self, image, max_tokens=300):

@@ -21,13 +21,16 @@ import os
 from abc import ABC
 from ollama import Client
 import dashscope
-from openai import OpenAI
+from openai import OpenAI, AzureOpenAI
 from FlagEmbedding import FlagModel
 import torch
 import numpy as np
 
 from api.utils.file_utils import get_project_base_directory, get_home_cache_dir
 from rag.utils import num_tokens_from_string, truncate
+
+from rag.settings import AZURE_OPENAI_DEPLOYMENT
+
 
 try:
     flag_model = FlagModel(os.path.join(get_home_cache_dir(), "bge-large-zh-v1.5"),
@@ -90,6 +93,27 @@ class OpenAIEmbed(Base):
             base_url = "https://api.openai.com/v1"
         self.client = OpenAI(api_key=key, base_url=base_url)
         self.model_name = model_name
+
+    def encode(self, texts: list, batch_size=32):
+        texts = [truncate(t, 8196) for t in texts]
+        res = self.client.embeddings.create(input=texts,
+                                            model=self.model_name)
+        return np.array([d.embedding for d in res.data]
+                        ), res.usage.total_tokens
+
+    def encode_queries(self, text):
+        res = self.client.embeddings.create(input=[truncate(text, 8196)],
+                                            model=self.model_name)
+        return np.array(res.data[0].embedding), res.usage.total_tokens
+
+
+class AzureOpenAIEmbed(Base):
+    def __init__(self, key, model_name="Azure/text-embedding-ada-002",
+                 base_url="https://api.openai.com/v1"):
+        if not base_url:
+            base_url = "https://api.openai.com/v1"
+        self.client = AzureOpenAI(api_key=key, base_url=base_url, api_version="2024-02-15-preview")
+        self.model_name = AZURE_OPENAI_DEPLOYMENT.get(model_name)
 
     def encode(self, texts: list, batch_size=32):
         texts = [truncate(t, 8196) for t in texts]

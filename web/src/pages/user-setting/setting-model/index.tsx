@@ -47,6 +47,7 @@ const IconMap = {
   'Tongyi-Qianwen': 'tongyi',
   Moonshot: 'moonshot',
   OpenAI: 'openai',
+  AzureOpenAI: 'azureopenai',
   'ZHIPU-AI': 'zhipu',
   文心一言: 'wenxin',
   Ollama: 'ollama',

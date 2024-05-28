@@ -16,11 +16,13 @@
 from zhipuai import ZhipuAI
 from dashscope import Generation
 from abc import ABC
-from openai import OpenAI
+from openai import OpenAI, AzureOpenAI
 import openai
 from ollama import Client
 from rag.nlp import is_english
 from rag.utils import num_tokens_from_string
+
+from rag.settings import AZURE_OPENAI_DEPLOYMENT
 
 
 class Base(ABC):
@@ -74,6 +76,12 @@ class GptTurbo(Base):
     def __init__(self, key, model_name="gpt-3.5-turbo", base_url="https://api.openai.com/v1"):
         if not base_url: base_url="https://api.openai.com/v1"
         super().__init__(key, model_name, base_url)
+
+
+class AzureGptTurbo(Base):
+    def __init__(self, key, model_name="Azure/gpt-3.5-turbo", base_url="https://api.openai.com/v1"):
+        self.client = AzureOpenAI(api_key=key, base_url=base_url, api_version="2024-02-15-preview")
+        self.model_name = AZURE_OPENAI_DEPLOYMENT.get(model_name)
 
 
 class MoonshotChat(Base):

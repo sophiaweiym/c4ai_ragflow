@@ -53,3 +53,9 @@ SVR_QUEUE_RETENTION = 60*60
 SVR_QUEUE_MAX_LEN = 1024
 SVR_CONSUMER_NAME = "rag_flow_svr_consumer"
 SVR_CONSUMER_GROUP_NAME = "rag_flow_svr_consumer_group"
+
+AZURE_OPENAI_DEPLOYMENT = {
+    "Azure/gpt-3.5-turbo": "gpt-35-turbo",
+    "Azure/text-embedding-ada-002": "text-embedding-ada-002",
+    "Azure/gpt-4": "gpt-4"
+}

@@ -69,6 +69,12 @@ default_llm = {
         "image2text_model": "gpt-4-vision-preview",
         "asr_model": "whisper-1",
     },
+    "AzureOpenAI": {
+        "chat_model": "azure/gpt-3.5-turbo",
+        "embedding_model": "azure/text-embedding-ada-002",
+        "image2text_model": "",
+        "asr_model": "",
+    },
     "ZHIPU-AI": {
         "chat_model": "glm-3-turbo",
         "embedding_model": "embedding-2",

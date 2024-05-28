@@ -31,7 +31,7 @@ from api.settings import CHAT_MDL, EMBEDDING_MDL, ASR_MDL, IMAGE2TEXT_MDL, PARSE
 def init_superuser():
     user_info = {
         "id": uuid.uuid1().hex,
-        "password": "admin",
+        "password": "YWRtaW4=",
         "nickname": "admin",
         "is_superuser": True,
         "email": "admin@ragflow.io",
@@ -131,6 +131,11 @@ factory_infos = [{
     "name": "DeepSeek",
     "logo": "",
     "tags": "LLM",
+    "status": "1",
+}, {
+    "name": "AzureOpenAI",
+    "logo": "",
+    "tags": "LLM,TEXT EMBEDDING,SPEECH2TEXT,MODERATION",
     "status": "1",
 },
     # {
@@ -370,6 +375,26 @@ def init_llm_factory():
             "llm_name": "deepseek-coder",
             "tags": "LLM,CHAT,",
             "max_tokens": 16385,
+            "model_type": LLMType.CHAT.value
+        },
+        # ---------------------- AzureOpenAI ------------------------
+        {
+            "fid": factory_infos[9]["name"],
+            "llm_name": "Azure/gpt-3.5-turbo",
+            "tags": "LLM,CHAT,4K",
+            "max_tokens": 4096,
+            "model_type": LLMType.CHAT.value
+        }, {
+            "fid": factory_infos[9]["name"],
+            "llm_name": "Azure/text-embedding-ada-002",
+            "tags": "TEXT EMBEDDING,8K",
+            "max_tokens": 8191,
+            "model_type": LLMType.EMBEDDING.value
+        }, {
+            "fid": factory_infos[9]["name"],
+            "llm_name": "Azure/gpt-4",
+            "tags": "LLM,CHAT,8K",
+            "max_tokens": 8191,
             "model_type": LLMType.CHAT.value
         },
     ]

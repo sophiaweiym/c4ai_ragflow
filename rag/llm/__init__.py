@@ -21,6 +21,7 @@ from .cv_model import *
 EmbeddingModel = {
     "Ollama": OllamaEmbed,
     "OpenAI": OpenAIEmbed,
+    "AzureOpenAI": AzureOpenAIEmbed,
     "Xinference": XinferenceEmbed,
     "Tongyi-Qianwen": DefaultEmbedding, #QWenEmbed,
     "ZHIPU-AI": ZhipuEmbed,
@@ -32,6 +33,7 @@ EmbeddingModel = {
 
 CvModel = {
     "OpenAI": GptV4,
+    "AzureOpenAI": AzureGptV4,
     "Ollama": OllamaCV,
     "Xinference": XinferenceCV,
     "Tongyi-Qianwen": QWenCV,
@@ -42,6 +44,7 @@ CvModel = {
 
 ChatModel = {
     "OpenAI": GptTurbo,
+    "AzureOpenAI": AzureGptTurbo,
     "ZHIPU-AI": ZhipuChat,
     "Tongyi-Qianwen": QWenChat,
     "Ollama": OllamaChat,

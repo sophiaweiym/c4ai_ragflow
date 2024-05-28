@@ -87,6 +87,15 @@ const ApiKeyModal = ({
             <Input placeholder="https://api.openai.com/v1" />
           </Form.Item>
         )}
+        {llmFactory === 'AzureOpenAI' && (
+          <Form.Item<FieldType>
+            label={t('baseUrl')}
+            name="base_url"
+            tooltip={t('baseUrlTip')}
+          >
+            <Input placeholder="https://api.openai.com/v1" />
+          </Form.Item>
+        )}
       </Form>
     </Modal>
   );
