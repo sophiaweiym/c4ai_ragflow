@@ -70,7 +70,7 @@ class TaskService(CommonService):
     @classmethod
     @DB.connection_context()
     def get_ongoing_doc_name(cls):
-        with DB.lock("get_task", -1):
+        with DB.lock("get_task", 157680000):
             docs = cls.model.select(*[Document.id, Document.kb_id, Document.location, File.parent_id]) \
                 .join(Document, on=(cls.model.doc_id == Document.id)) \
                 .join(File2Document, on=(File2Document.document_id == Document.id), join_type=JOIN.LEFT_OUTER) \
@@ -101,7 +101,7 @@ class TaskService(CommonService):
     @classmethod
     @DB.connection_context()
     def update_progress(cls, id, info):
-        with DB.lock("update_progress", -1):
+        with DB.lock("update_progress", 157680000):
             if info["progress_msg"]:
                 cls.model.update(progress_msg=cls.model.progress_msg + "\n" + info["progress_msg"]).where(
                     cls.model.id == id).execute()
