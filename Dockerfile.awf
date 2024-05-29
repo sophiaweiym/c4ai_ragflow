@@ -1,0 +1,14 @@
+FROM infiniflow/ragflow:v0.6.0
+
+ADD ./web ./web
+RUN cd ./web && npm i --force && npm run build
+
+ADD ./api/db/ ./api/db/
+ADD ./api/settings.py ./api/settings.py
+ADD ./api/apps/api_app.py ./api/api_app.py
+ADD ./api/apps/conversation_app.py ./api/apps/conversation_app.py
+ADD ./rag/llm ./rag/llm/
+ADD ./rag/settings.py ./rag/settings.py
+
+
+
