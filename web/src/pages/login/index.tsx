@@ -1,4 +1,5 @@
-import { useLogin, useRegister } from '@/hooks/login-hooks';
+import { useLogin, useRegister } from '@/hooks/loginHooks';
+import { useOneNamespaceEffectsLoading } from '@/hooks/storeHooks';
 import { rsaPsw } from '@/utils';
 import { Button, Checkbox, Form, Input } from 'antd';
 import { useEffect, useState } from 'react';
@@ -12,10 +13,16 @@ import styles from './index.less';
 const Login = () => {
   const [title, setTitle] = useState('login');
   const navigate = useNavigate();
-  const { login, loading: signLoading } = useLogin();
-  const { register, loading: registerLoading } = useRegister();
+  const login = useLogin();
+  const register = useRegister();
   const { t } = useTranslation('translation', { keyPrefix: 'login' });
-  const loading = signLoading || registerLoading;
+
+  // TODO: When the server address request is not accessible, the value of dva-loading always remains true.
+
+  const signLoading = useOneNamespaceEffectsLoading('loginModel', [
+    'login',
+    'register',
+  ]);
 
   const changeTitle = () => {
     setTitle((title) => (title === 'login' ? 'register' : 'login'));
@@ -119,14 +126,6 @@ const Login = () => {
               </Form.Item>
             )}
             <div>
-              {title === 'login' && (
-                <div>
-                  {t('signInTip')}
-                  <Button type="link" onClick={changeTitle}>
-                    {t('signUp')}
-                  </Button>
-                </div>
-              )}
               {title === 'register' && (
                 <div>
                   {t('signUpTip')}
@@ -141,44 +140,10 @@ const Login = () => {
               block
               size="large"
               onClick={onCheck}
-              loading={loading}
+              loading={signLoading}
             >
               {title === 'login' ? t('login') : t('continue')}
             </Button>
-            {title === 'login' && (
-              <>
-                {/* <Button
-                  block
-                  size="large"
-                  onClick={toGoogle}
-                  style={{ marginTop: 15 }}
-                >
-                  <div>
-                    <Icon
-                      icon="local:google"
-                      style={{ verticalAlign: 'middle', marginRight: 5 }}
-                    />
-                    Sign in with Google
-                  </div>
-                </Button> */}
-                {location.host === Domain && (
-                  <Button
-                    block
-                    size="large"
-                    onClick={toGoogle}
-                    style={{ marginTop: 15 }}
-                  >
-                    <div>
-                      <Icon
-                        icon="local:github"
-                        style={{ verticalAlign: 'middle', marginRight: 5 }}
-                      />
-                      Sign in with Github
-                    </div>
-                  </Button>
-                )}
-              </>
-            )}
           </Form>
         </div>
       </div>
